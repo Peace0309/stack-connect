@@ -1,0 +1,17 @@
+from app.models.models import (  # noqa: F401
+    Assessment,
+    AssessmentAttempt,
+    AssessmentQuestion,
+    Competency,
+    Course,
+    CourseCompetency,
+    Department,
+    LearningMaterial,
+    MCQ,
+    Notification,
+    Recommendation,
+    Role,
+    TrainingHistory,
+    User,
+    UserCompetency,
+)

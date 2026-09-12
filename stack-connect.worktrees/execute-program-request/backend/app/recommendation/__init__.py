@@ -1,0 +1,1 @@
+from app.recommendation.engine import WEIGHTS, ScoredCourse, recommend  # noqa: F401
