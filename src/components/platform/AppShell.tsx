@@ -1,4 +1,5 @@
 import { Link, useNavigate, useRouterState } from "@tanstack/react-router";
+
 import {
   BarChart3,
   BookOpen,
@@ -17,6 +18,7 @@ import { useEffect, type ReactNode } from "react";
 import { Button } from "@/components/ui/button";
 import { usePlatform } from "@/lib/platform/store";
 import { cn } from "@/lib/utils";
+import { ChatWidget } from "./ChatWidget";
 
 const EMPLOYEE_NAV = [
   { to: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
@@ -152,6 +154,7 @@ export function AppShell({
         <main className="flex-1 p-5">
           <div className="mx-auto w-full max-w-6xl space-y-6">{children}</div>
         </main>
+        <ChatWidget />
       </div>
     </div>
   );

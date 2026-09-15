@@ -21,13 +21,13 @@ import type { GapSeverity } from "@/lib/platform/types";
 export const Route = createFileRoute("/gaps")({
   head: () => ({
     meta: [
-      { title: "AI Skill-Gap Detection · PS 101" },
+      { title: "AI Skill-Gap Detection · StatConnect" },
       {
         name: "description",
         content:
           "Detected competency gaps ranked from Critical to Low, comparing assessed levels with role-required levels.",
       },
-      { property: "og:title", content: "AI Skill-Gap Detection · PS 101" },
+      { property: "og:title", content: "AI Skill-Gap Detection · StatConnect" },
       {
         property: "og:description",
         content: "Gap severity across all twenty competencies with recommended action.",

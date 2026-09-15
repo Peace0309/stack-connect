@@ -13,13 +13,13 @@ import { LEVEL_LABELS, type CompetencyCategory } from "@/lib/platform/types";
 export const Route = createFileRoute("/competencies")({
   head: () => ({
     meta: [
-      { title: "Competency Framework · PS 101" },
+      { title: "Competency Framework · StatConnect" },
       {
         name: "description",
         content:
           "Twenty role competencies across statistical, technical, digital governance and behavioural categories with current and required levels.",
       },
-      { property: "og:title", content: "Competency Framework · PS 101" },
+      { property: "og:title", content: "Competency Framework · StatConnect" },
       {
         property: "og:description",
         content: "Current versus required levels across the full competency framework.",
