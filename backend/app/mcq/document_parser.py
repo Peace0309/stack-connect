@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import io
+from collections import Counter
 from pathlib import Path
 
 import fitz  # PyMuPDF
@@ -9,7 +10,16 @@ from docx import Document
 from pptx import Presentation
 
 SUPPORTED = {".pdf", ".docx", ".pptx", ".txt", ".md"}
-
+def _strip_repeated_lines(pages: list[str]) -> list[str]:
+    if len(pages) < 3:
+        return pages
+    page_lines = [[ln.strip() for ln in p.split("\n")] for p in pages]
+    line_counts: Counter[str] = Counter()
+    for lines in page_lines:
+        line_counts.update(set(ln for ln in lines if ln))
+    threshold = max(3, len(pages) // 2)
+    boilerplate = {ln for ln, count in line_counts.items() if count >= threshold}
+    return ["\n".join(ln for ln in lines if ln not in boilerplate) for lines in page_lines]
 
 def parse(file_bytes: bytes, file_name: str) -> str:
     suffix = Path(file_name).suffix.lower()
@@ -21,8 +31,9 @@ def parse(file_bytes: bytes, file_name: str) -> str:
 
     if suffix == ".pdf":
         with fitz.open(stream=file_bytes, filetype="pdf") as doc:
-            return "\n".join(page.get_text() for page in doc)
-
+            pages = [page.get_text() for page in doc]
+        pages = _strip_repeated_lines(pages)
+        return "\n".join(pages)
     if suffix == ".docx":
         document = Document(io.BytesIO(file_bytes))
         parts = [p.text for p in document.paragraphs]

@@ -4,3 +4,6 @@ backend/.venv/
 .venv/
 __pycache__/
 *.pyc
+.env
+.output/
+node_modules/
