@@ -72,9 +72,7 @@ export function AppShell({
     <div className="flex min-h-screen bg-background">
       <aside className="hidden w-64 shrink-0 flex-col bg-sidebar text-sidebar-foreground lg:flex">
         <div className="border-b border-sidebar-border px-5 py-5">
-          <p className="text-xs font-semibold uppercase tracking-widest text-sidebar-primary">
-            
-          </p>
+        
           <p className="mt-1 text-sm font-semibold leading-tight">
             AI-Enabled Learning Platform
           </p>
