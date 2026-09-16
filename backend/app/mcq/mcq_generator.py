@@ -2,6 +2,10 @@ from __future__ import annotations
 
 import json
 import os
+<<<<<<< HEAD
+import random
+=======
+>>>>>>> origin/main
 import re
 from typing import Any, Dict, List
 
@@ -60,6 +64,11 @@ def generate_offline(
         correct = keyword
         distractors = [f"Not {keyword}", f"The opposite of {keyword}", "None of the above"]
         options = [correct, *distractors]
+<<<<<<< HEAD
+        random.shuffle(options)
+        correct_index = options.index(correct)
+=======
+>>>>>>> origin/main
         items.append(
             {
                 "competency_id": competency_id,
@@ -68,7 +77,11 @@ def generate_offline(
                     f"this statement? \u201c{excerpt[:180]}\u2026\u201d"
                 ),
                 "options": options,
+<<<<<<< HEAD
+                "correct_index": correct_index,
+=======
                 "correct_index": 0,
+>>>>>>> origin/main
                 "explanation": (
                     f"The source passage states this directly: \u201c{excerpt[:160]}\u201d"
                 ),

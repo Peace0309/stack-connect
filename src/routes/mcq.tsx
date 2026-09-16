@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { CheckCircle2, Loader2, Upload, XCircle } from "lucide-react";
-import { useState } from "react";
+import { CheckCircle2, ExternalLink, Loader2, Upload, XCircle } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
 
 import { AppShell } from "@/components/platform/AppShell";
@@ -77,6 +77,21 @@ function McqPage() {
   const [engine, setEngine] = useState<string | null>(null);
   const [answers, setAnswers] = useState<Record<string, number>>({});
   const [scored, setScored] = useState<{ correct: number; total: number } | null>(null);
+  const [sourceFileUrl, setSourceFileUrl] = useState<string | null>(null);
+  const [sourceFileName, setSourceFileName] = useState<string | null>(null);
+  const sourceUrlRef = useRef<string | null>(null);
+
+  useEffect(() => {
+    return () => {
+      if (sourceUrlRef.current) URL.revokeObjectURL(sourceUrlRef.current);
+    };
+  }, []);
+
+  const sourceHref = (excerpt: string) => {
+    if (!sourceFileUrl) return null;
+    const snippet = excerpt.trim().split(/\s+/).slice(0, 8).join(" ");
+    return `${sourceFileUrl}#page=1&search=${encodeURIComponent(snippet)}`;
+  };
 
   const generate = async () => {
     if (!file) {
@@ -87,6 +102,12 @@ function McqPage() {
     setScored(null);
     setAnswers({});
     try {
+      if (sourceUrlRef.current) URL.revokeObjectURL(sourceUrlRef.current);
+      const objectUrl = URL.createObjectURL(file);
+      sourceUrlRef.current = objectUrl;
+      setSourceFileUrl(objectUrl);
+      setSourceFileName(file.name);
+
       const text = await extractText(file);
       const n = Number(count);
       let produced: GeneratedMCQ[] | null = null;
@@ -160,7 +181,7 @@ function McqPage() {
     <AppShell
       role="employee"
       title="AI MCQ Generator"
-      subtitle="Upload material → generate → validate → review → test → update competencies"
+      subtitle="Upload material → generate → test → review answers → update competencies"
     >
       <Card>
         <CardHeader>
@@ -249,90 +270,9 @@ function McqPage() {
           <Card>
             <CardHeader>
               <CardTitle className="text-base">
-                2. Review, edit and validate — {questions.length} questions from{" "}
+                2. Take the assessment — {questions.length} questions from{" "}
                 {materialName}
               </CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-5">
-              {questions.map((q, index) => {
-                const checks = validate(q);
-                const passed = Object.values(checks).filter(Boolean).length;
-                return (
-                  <div key={q.id} className="rounded-md border p-4">
-                    <div className="flex flex-wrap items-center justify-between gap-2">
-                      <p className="text-xs text-muted-foreground">
-                        Q{index + 1} · {competencyById(q.competencyId)?.name} ·{" "}
-                        {q.difficulty} · {q.language}
-                      </p>
-                      <Badge variant={passed === 5 ? "secondary" : "destructive"}>
-                        Validation {passed}/5
-                      </Badge>
-                    </div>
-
-                    <Textarea
-                      className="mt-3"
-                      value={q.question}
-                      onChange={(e) =>
-                        updateQuestion({ ...q, question: e.target.value })
-                      }
-                    />
-
-                    <div className="mt-3 space-y-2">
-                      {q.options.map((opt, i) => (
-                        <div key={i} className="flex items-center gap-2">
-                          <button
-                            type="button"
-                            onClick={() => updateQuestion({ ...q, correctIndex: i })}
-                            className={cn(
-                              "h-5 w-5 shrink-0 rounded-full border",
-                              q.correctIndex === i && "bg-primary",
-                            )}
-                            aria-label={`Mark option ${i + 1} correct`}
-                          />
-                          <Input
-                            value={opt}
-                            onChange={(e) => {
-                              const options = [...q.options];
-                              options[i] = e.target.value;
-                              updateQuestion({ ...q, options });
-                            }}
-                          />
-                        </div>
-                      ))}
-                    </div>
-
-                    <Textarea
-                      className="mt-3"
-                      value={q.explanation}
-                      onChange={(e) =>
-                        updateQuestion({ ...q, explanation: e.target.value })
-                      }
-                    />
-                    <p className="mt-2 rounded bg-muted p-2 text-xs text-muted-foreground">
-                      Source excerpt: {q.sourceExcerpt}
-                    </p>
-
-                    <div className="mt-3 flex flex-wrap gap-3 text-xs">
-                      {CHECK_LABELS.map(([key, label]) => (
-                        <span key={key} className="flex items-center gap-1">
-                          {checks[key] ? (
-                            <CheckCircle2 className="h-3.5 w-3.5 text-green-700" />
-                          ) : (
-                            <XCircle className="h-3.5 w-3.5 text-destructive" />
-                          )}
-                          {label}
-                        </span>
-                      ))}
-                    </div>
-                  </div>
-                );
-              })}
-            </CardContent>
-          </Card>
-
-          <Card>
-            <CardHeader>
-              <CardTitle className="text-base">3. Take the assessment</CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
               {questions.map((q, index) => (
@@ -365,22 +305,118 @@ function McqPage() {
                       );
                     })}
                   </div>
-                  {scored ? (
-                    <p className="mt-2 text-xs text-muted-foreground">{q.explanation}</p>
-                  ) : null}
                 </div>
               ))}
 
               {scored ? (
                 <p className="text-sm font-semibold">
                   Score {scored.correct}/{scored.total} — competency profile and
-                  recommendations recalculated.
+                  recommendations recalculated. See the review below for explanations.
                 </p>
               ) : (
                 <Button onClick={submitTest}>Submit and update competencies</Button>
               )}
             </CardContent>
           </Card>
+
+          {scored ? (
+            <Card>
+              <CardHeader>
+                <CardTitle className="text-base">
+                  3. Review, edit and validate — answers and explanations
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-5">
+                {questions.map((q, index) => {
+                  const checks = validate(q);
+                  const passed = Object.values(checks).filter(Boolean).length;
+                  return (
+                    <div key={q.id} className="rounded-md border p-4">
+                      <div className="flex flex-wrap items-center justify-between gap-2">
+                        <p className="text-xs text-muted-foreground">
+                          Q{index + 1} · {competencyById(q.competencyId)?.name} ·{" "}
+                          {q.difficulty} · {q.language}
+                        </p>
+                        <Badge variant={passed === 5 ? "secondary" : "destructive"}>
+                          Validation {passed}/5
+                        </Badge>
+                      </div>
+
+                      <Textarea
+                        className="mt-3"
+                        value={q.question}
+                        onChange={(e) =>
+                          updateQuestion({ ...q, question: e.target.value })
+                        }
+                      />
+
+                      <div className="mt-3 space-y-2">
+                        {q.options.map((opt, i) => (
+                          <div key={i} className="flex items-center gap-2">
+                            <button
+                              type="button"
+                              onClick={() => updateQuestion({ ...q, correctIndex: i })}
+                              className={cn(
+                                "h-5 w-5 shrink-0 rounded-full border",
+                                q.correctIndex === i && "bg-primary",
+                              )}
+                              aria-label={`Mark option ${i + 1} correct`}
+                            />
+                            <Input
+                              value={opt}
+                              onChange={(e) => {
+                                const options = [...q.options];
+                                options[i] = e.target.value;
+                                updateQuestion({ ...q, options });
+                              }}
+                            />
+                          </div>
+                        ))}
+                      </div>
+
+                      <Textarea
+                        className="mt-3"
+                        value={q.explanation}
+                        onChange={(e) =>
+                          updateQuestion({ ...q, explanation: e.target.value })
+                        }
+                      />
+                      <p className="mt-2 rounded bg-muted p-2 text-xs text-muted-foreground">
+                        Source excerpt:{" "}
+                        <mark className="rounded bg-yellow-200 px-0.5 underline decoration-yellow-600">
+                          {q.sourceExcerpt}
+                        </mark>
+                      </p>
+                      {sourceFileUrl ? (
+                        <a
+                          href={sourceHref(q.sourceExcerpt) ?? sourceFileUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="mt-2 inline-flex items-center gap-1 text-xs font-medium text-primary underline underline-offset-2"
+                        >
+                          <ExternalLink className="h-3 w-3" />
+                          Open {sourceFileName} and find this text
+                        </a>
+                      ) : null}
+
+                      <div className="mt-3 flex flex-wrap gap-3 text-xs">
+                        {CHECK_LABELS.map(([key, label]) => (
+                          <span key={key} className="flex items-center gap-1">
+                            {checks[key] ? (
+                              <CheckCircle2 className="h-3.5 w-3.5 text-green-700" />
+                            ) : (
+                              <XCircle className="h-3.5 w-3.5 text-destructive" />
+                            )}
+                            {label}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                  );
+                })}
+              </CardContent>
+            </Card>
+          ) : null}
         </>
       ) : null}
     </AppShell>
