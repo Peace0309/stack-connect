@@ -10,13 +10,13 @@ import { usePlatform } from "@/lib/platform/store";
 export const Route = createFileRoute("/profile")({
   head: () => ({
     meta: [
-      { title: "My Profile · PS 101" },
+      { title: "My Profile · StatConnect" },
       {
         name: "description",
         content:
           "Officer profile, posting details, learning hours and competency summary.",
       },
-      { property: "og:title", content: "My Profile · PS 101" },
+      { property: "og:title", content: "My Profile · StatConnect" },
       {
         property: "og:description",
         content: "Posting details, learning hours and competency summary.",

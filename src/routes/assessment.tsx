@@ -14,13 +14,13 @@ import { cn } from "@/lib/utils";
 export const Route = createFileRoute("/assessment")({
   head: () => ({
     meta: [
-      { title: "Competency Assessment · PS 101" },
+      { title: "Competency Assessment · StatConnect" },
       {
         name: "description",
         content:
           "A 15-question competency assessment covering sampling, survey design, data quality, Python, SQL, GIS, AI/ML and cyber security.",
       },
-      { property: "og:title", content: "Competency Assessment · PS 101" },
+      { property: "og:title", content: "Competency Assessment · StatConnect" },
       {
         property: "og:description",
         content: "Programmatically scored assessment that updates your competency profile.",

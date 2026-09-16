@@ -1,6 +1,11 @@
 from __future__ import annotations
 
 import os
+from pathlib import Path
+from dotenv import load_dotenv
+
+BASE_DIR = Path(__file__).resolve().parents[2]
+load_dotenv(BASE_DIR / ".env")
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
@@ -19,6 +24,7 @@ from app.routers import (
     recommendations,
     skill_gaps,
     users,
+    chatbot,
 )
 
 app = FastAPI(
@@ -33,23 +39,29 @@ app = FastAPI(
     redoc_url="/redoc",
 )
 
+cors_origins = [
+    origin.strip()
+    for origin in os.getenv(
+        "CORS_ORIGINS",
+        "http://localhost:8080,http://localhost:5173,http://localhost:3000",
+    ).split(",")
+    if origin.strip()
+]
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[
-        origin.strip()
-for origin in os.getenv(
-    "CORS_ORIGINS",
-    "http://localhost:3000,http://localhost:3001,http://localhost:8080,http://localhost:8081,http://localhost:8082",
-).split(",")
-        if origin.strip()
-    ],
-    allow_origin_regex=r"http://(localhost|127\.0\.0\.1|10\.\d{1,3}\.\d{1,3}\.\d{1,3}|192\.168\.\d{1,3}\.\d{1,3})(:\d+)?",
+    allow_origins=cors_origins,
+    allow_origin_regex=(
+        r"http://(localhost|127\.0\.0\.1|10\.\d{1,3}\.\d{1,3}\.\d{1,3}"
+        r"|192\.168\.\d{1,3}\.\d{1,3})(:\d+)?"
+    ),
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
 API_PREFIX = "/api"
+
 app.include_router(auth.router, prefix=API_PREFIX)
 app.include_router(users.router, prefix=API_PREFIX)
 app.include_router(competencies.router, prefix=API_PREFIX)
@@ -62,15 +74,18 @@ app.include_router(mcqs.router, prefix=API_PREFIX)
 app.include_router(mcq_offline.router, prefix=API_PREFIX)
 app.include_router(progress.router, prefix=API_PREFIX)
 app.include_router(admin.router, prefix=API_PREFIX)
+app.include_router(chatbot.router, prefix=API_PREFIX)
 
 
 @app.on_event("startup")
 def on_startup() -> None:
-    # Schema is owned by database/schema.sql; create_all is a dev convenience.
-    if os.getenv("APP_ENV", "development") == "development":
-        Base.metadata.create_all(bind=engine)
+    print("API started. Database initialization skipped.")
 
 
 @app.get("/health", tags=["system"])
 def health() -> dict:
-    return {"status": "ok", "service": "ps101-api", "igot_mode": os.getenv("IGOT_MODE", "mock")}
+    return {
+        "status": "ok",
+        "service": "ps101-api",
+        "igot_mode": os.getenv("IGOT_MODE", "mock"),
+    }

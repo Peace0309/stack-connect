@@ -54,7 +54,7 @@ function LoginPage() {
       <header className="border-b bg-sidebar px-5 py-4 text-sidebar-foreground">
         <div className="mx-auto flex max-w-6xl items-center justify-between">
           <Link to="/" className="text-sm font-semibold">
-            SIH PS 101 · AI-Enabled Learning Platform
+            StatConnect · AI-Enabled Learning Platform
           </Link>
         </div>
       </header>

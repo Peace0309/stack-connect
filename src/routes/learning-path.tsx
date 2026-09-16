@@ -13,13 +13,13 @@ import { usePlatform } from "@/lib/platform/store";
 export const Route = createFileRoute("/learning-path")({
   head: () => ({
     meta: [
-      { title: "Personalised Learning Path · PS 101" },
+      { title: "Personalised Learning Path · StatConnect" },
       {
         name: "description",
         content:
           "Weighted course recommendations ranked by skill gap, role relevance, learning history, difficulty match and department priority.",
       },
-      { property: "og:title", content: "Personalised Learning Path · PS 101" },
+      { property: "og:title", content: "Personalised Learning Path · StatConnect" },
       {
         property: "og:description",
         content: "Your ranked iGOT Karmayogi learning path with transparent scoring.",

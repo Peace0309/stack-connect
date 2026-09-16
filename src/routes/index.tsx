@@ -15,7 +15,7 @@ import { COMPETENCIES, IGOT_COURSES } from "@/lib/platform/data";
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "PS 101 · AI-Enabled Learning Platform for Official Statistics" },
+      { title: "StatConnect AI-Enabled Learning Platform for Official Statistics" },
       {
         name: "description",
         content:
@@ -23,7 +23,7 @@ export const Route = createFileRoute("/")({
       },
       {
         property: "og:title",
-        content: "PS 101 · AI-Enabled Learning Platform for Official Statistics",
+        content: "StatConnect AI-Enabled Learning Platform for Official Statistics",
       },
       {
         property: "og:description",
@@ -70,7 +70,7 @@ function Landing() {
         <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-3 px-5 py-4">
           <div>
             <p className="text-xs font-semibold uppercase tracking-widest text-sidebar-primary">
-              Smart India Hackathon · Problem Statement 101
+              StatConnect
             </p>
             <p className="text-sm font-semibold">
               AI-Enabled Learning Platform · Official Statistical System

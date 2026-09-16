@@ -14,13 +14,13 @@ import { usePlatform } from "@/lib/platform/store";
 export const Route = createFileRoute("/progress")({
   head: () => ({
     meta: [
-      { title: "Learning Progress · PS 101" },
+      { title: "Learning Progress · StatConnect" },
       {
         name: "description",
         content:
           "Track enrolled iGOT courses, update completion and see how learning feeds back into your competency profile.",
       },
-      { property: "og:title", content: "Learning Progress · PS 101" },
+      { property: "og:title", content: "Learning Progress · StatConnect" },
       {
         property: "og:description",
         content: "Course completion tracking and the full closed-loop activity trail.",

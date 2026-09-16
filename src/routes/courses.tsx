@@ -21,13 +21,13 @@ import { usePlatform } from "@/lib/platform/store";
 export const Route = createFileRoute("/courses")({
   head: () => ({
     meta: [
-      { title: "iGOT Karmayogi Catalogue · PS 101" },
+      { title: "iGOT Karmayogi Catalogue · StatConnect" },
       {
         name: "description",
         content:
           "Browse and enrol in mock iGOT Karmayogi courses mapped to the official statistics competency framework.",
       },
-      { property: "og:title", content: "iGOT Karmayogi Catalogue · PS 101" },
+      { property: "og:title", content: "iGOT Karmayogi Catalogue · StatConnect" },
       {
         property: "og:description",
         content: "Sixteen competency-mapped courses with enrolment via a mock API.",

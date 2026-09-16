@@ -31,13 +31,13 @@ import { COMPETENCIES, DEPARTMENTS } from "@/lib/platform/data";
 export const Route = createFileRoute("/admin")({
   head: () => ({
     meta: [
-      { title: "Workforce Analytics · PS 101" },
+      { title: "Workforce Analytics · StatConnect" },
       {
         name: "description",
         content:
           "Capacity-building analytics across 1,250 officials: competency distribution, critical gaps and emerging skills demand.",
       },
-      { property: "og:title", content: "Workforce Analytics · PS 101" },
+      { property: "og:title", content: "Workforce Analytics · StatConnect" },
       {
         property: "og:description",
         content: "Department-wise competency distribution and emerging skills analytics.",

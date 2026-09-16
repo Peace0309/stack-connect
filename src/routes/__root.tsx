@@ -79,7 +79,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "PS 101 · AI-Enabled Learning Platform" },
+      { title: "StatConnect AI-Enabled Learning Platform" },
       {
         name: "description",
         content:

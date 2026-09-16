@@ -28,13 +28,13 @@ import { cn } from "@/lib/utils";
 export const Route = createFileRoute("/mcq")({
   head: () => ({
     meta: [
-      { title: "AI MCQ Generator · PS 101" },
+      { title: "AI MCQ Generator · StatConnect" },
       {
         name: "description",
         content:
           "Upload PDF, DOCX or TXT training material, generate MCQs with AI, validate them on five checks and take the assessment in place.",
       },
-      { property: "og:title", content: "AI MCQ Generator · PS 101" },
+      { property: "og:title", content: "AI MCQ Generator · StatConnect" },
       {
         property: "og:description",
         content: "From training material to validated assessment in one screen.",

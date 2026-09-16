@@ -19,13 +19,13 @@ import { usePlatform } from "@/lib/platform/store";
 export const Route = createFileRoute("/dashboard")({
   head: () => ({
     meta: [
-      { title: "Officer Dashboard · PS 101" },
+      { title: "Officer Dashboard · StatConnect" },
       {
         name: "description",
         content:
           "Competency KPIs, radar profile and prioritised skill gaps for the signed-in statistical officer.",
       },
-      { property: "og:title", content: "Officer Dashboard · PS 101" },
+      { property: "og:title", content: "Officer Dashboard · StatConnect" },
       {
         property: "og:description",
         content: "Your competency snapshot, gaps and next recommended learning.",
